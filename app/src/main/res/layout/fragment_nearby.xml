@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+
+  <include
+    layout="@layout/mapview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/linearLayout" />
+
+  <LinearLayout
+
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+      <EditText
+
+        android:id="@+id/latitude_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="latitude"
+        android:inputType="numberDecimal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:singleLine="true"
+        android:text="28.5537183" />
+
+      <EditText
+
+        android:id="@+id/longitude_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="longitude"
+        android:inputType="numberDecimal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:singleLine="true"
+
+        android:text="77.2692391" />
+    </LinearLayout>
+
+    <RadioGroup
+      android:id="@+id/radio_group"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+      <RadioButton
+        android:id="@+id/categories_radioButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:checked="true"
+        android:text="By Category"
+
+        android:visibility="gone" />
+
+      <RadioButton
+        android:id="@+id/keywords_radioButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:checked="true"
+
+        android:text="By Keywords" />
+    </RadioGroup>
+
+    <EditText
+      android:id="@+id/cat_editText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:ems="10"
+      android:hint="Category code"
+      android:inputType="textPersonName"
+      android:paddingLeft="20dp"
+      android:paddingRight="20dp"
+      android:singleLine="true"
+      android:text="FINATM"
+      android:visibility="gone" />
+
+    <EditText
+      android:id="@+id/keywords_editText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:ems="10"
+      android:enabled="false"
+      android:hint="Keywords"
+      android:inputType="textPersonName"
+      android:paddingLeft="20dp"
+      android:paddingRight="20dp"
+      android:singleLine="true"
+
+      android:text="Pizza" />
+
+    <Button
+      android:id="@+id/search_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+
+      android:text="Search" />
+  </LinearLayout>
+
+
+</RelativeLayout>

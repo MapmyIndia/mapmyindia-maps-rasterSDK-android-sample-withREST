@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@android:color/white"
+  android:orientation="vertical"
+  android:padding="5dp">
+
+  <EditText
+    android:id="@+id/start_editText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:digits="0123456789.,"
+    android:hint="Start" />
+
+  <EditText
+    android:id="@+id/end_editText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:digits="0123456789.,"
+    android:hint="End" />
+
+  <Button
+
+    android:id="@+id/get_direction_button"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Get directions" />
+</LinearLayout>
