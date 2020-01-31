@@ -29,7 +29,6 @@ import java.util.ArrayList;
  * Created by Mohammad Akram on 03-04-2015
  */
 public class PolygonFragment extends Fragment implements MapEventsReceiver, MapViewConstants {
-  private static final String TAG = PolygonFragment.class.getSimpleName();
   protected SharedPreferences mPrefs;
   MapView mMapView;
 
@@ -48,7 +47,6 @@ public class PolygonFragment extends Fragment implements MapEventsReceiver, MapV
     MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(getActivity(), this);
     mMapView.getOverlays().add(0, mapEventsOverlay); //inserted at the "bottom" of all overlays
     mMapView.setMultiTouchControls(true);
-    // mMapView.setUseDataConnection(false);
 
 
     ArrayList<MarkerModel> markerModels = new ArrayList<>();
@@ -80,13 +78,11 @@ public class PolygonFragment extends Fragment implements MapEventsReceiver, MapV
     mMapView.setMapListener(new MapListener() {
       @Override
       public boolean onScroll(ScrollEvent event) {
-        //setMapData(mMapView);
         return false;
       }
 
       @Override
       public boolean onZoom(ZoomEvent event) {
-        // setMapData(mMapView);
         return false;
       }
     });
@@ -100,14 +96,10 @@ public class PolygonFragment extends Fragment implements MapEventsReceiver, MapV
   @Override
   public void onPause() {
     final SharedPreferences.Editor edit = mPrefs.edit();
-
     edit.putInt(PREFS_SCROLL_X, mMapView.getScrollX());
     edit.putInt(PREFS_SCROLL_Y, mMapView.getScrollY());
     edit.putInt(PREFS_ZOOM_LEVEL, mMapView.getZoomLevel());
-
-    edit.commit();
-
-
+    edit.apply();
     super.onPause();
   }
 
@@ -116,8 +108,6 @@ public class PolygonFragment extends Fragment implements MapEventsReceiver, MapV
     super.onResume();
     mMapView.setZoom(mPrefs.getInt(PREFS_ZOOM_LEVEL, 5));
     mMapView.scrollTo(mPrefs.getInt(PREFS_SCROLL_X, 0), mPrefs.getInt(PREFS_SCROLL_Y, 0));
-
-
   }
 
   @Override
@@ -129,6 +119,5 @@ public class PolygonFragment extends Fragment implements MapEventsReceiver, MapV
   public boolean longPressHelper(GeoPoint p) {
     return false;
   }
-
 
 }

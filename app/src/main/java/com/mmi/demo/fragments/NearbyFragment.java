@@ -15,14 +15,12 @@ import com.mmi.MapView;
 import com.mmi.MapmyIndiaMapView;
 import com.mmi.demo.R;
 import com.mmi.demo.util.TransparentProgressDialog;
-import com.mmi.demo.widget.DelayAutoCompleteTextView;
 import com.mmi.layers.BasicInfoWindow;
 import com.mmi.layers.Marker;
 import com.mmi.services.api.nearby.MapmyIndiaNearby;
 import com.mmi.services.api.nearby.model.NearbyAtlasResponse;
 import com.mmi.services.api.nearby.model.NearbyAtlasResult;
 import com.mmi.util.GeoPoint;
-import com.mmi.util.LogUtils;
 import com.mmi.util.constants.MapViewConstants;
 
 import java.util.ArrayList;
@@ -34,15 +32,12 @@ import retrofit2.Response;
 /**
  * Created by Mohammad Akram on 03-04-2015
  */
-public class NearbyFragment extends Fragment implements MapViewConstants, View.OnClickListener {
-
-  private static final String TAG = NearbyFragment.class.getSimpleName();
+public class NearbyFragment extends Fragment implements MapViewConstants {
 
   EditText categoryEditTextView;
 
   MapView mMapView = null;
   BasicInfoWindow infoWindow;
-  DelayAutoCompleteTextView searchEditText = null;
   TransparentProgressDialog transparentProgressDialog;
   private SharedPreferences mPrefs;
   private EditText keywordsEditTextView;
@@ -71,11 +66,11 @@ public class NearbyFragment extends Fragment implements MapViewConstants, View.O
   private void setupUI(View view) {
 
     // view.findViewById(R.id.search_button).setOnClickListener(this);
-    categoryEditTextView = (EditText) view.findViewById(R.id.cat_editText);
-    keywordsEditTextView = (EditText) view.findViewById(R.id.keywords_editText);
-    latitudeEditTextView = (EditText) view.findViewById(R.id.latitude_edit_text);
-    longitudeEditTextView = (EditText) view.findViewById(R.id.longitude_edit_text);
-    final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radio_group);
+    categoryEditTextView = view.findViewById(R.id.cat_editText);
+    keywordsEditTextView = view.findViewById(R.id.keywords_editText);
+    latitudeEditTextView = view.findViewById(R.id.latitude_edit_text);
+    longitudeEditTextView = view.findViewById(R.id.longitude_edit_text);
+    final RadioGroup radioGroup = view.findViewById(R.id.radio_group);
 
     radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
       @Override
@@ -158,19 +153,10 @@ public class NearbyFragment extends Fragment implements MapViewConstants, View.O
   @Override
   public void onPause() {
     final SharedPreferences.Editor edit = mPrefs.edit();
-
     edit.putInt(PREFS_SCROLL_X, mMapView.getScrollX());
     edit.putInt(PREFS_SCROLL_Y, mMapView.getScrollY());
     edit.putInt(PREFS_ZOOM_LEVEL, mMapView.getZoomLevel());
-
-    edit.commit();
-
-    LogUtils.LOGE(TAG, "onPause");
-    LogUtils.LOGE(TAG, mMapView.getScrollX() + "");
-    LogUtils.LOGE(TAG, mMapView.getScrollY() + "");
-    LogUtils.LOGE(TAG, mMapView.getZoomLevel() + "");
-
-
+    edit.apply();
     super.onPause();
   }
 
@@ -179,25 +165,8 @@ public class NearbyFragment extends Fragment implements MapViewConstants, View.O
     super.onResume();
     mMapView.setZoom(mPrefs.getInt(PREFS_ZOOM_LEVEL, 5));
     mMapView.scrollTo(mPrefs.getInt(PREFS_SCROLL_X, 0), mPrefs.getInt(PREFS_SCROLL_Y, 0));
-
-    LogUtils.LOGE(TAG, "onResume");
-
-    LogUtils.LOGE(TAG, mPrefs.getInt(PREFS_SCROLL_X, 0) + "");
-    LogUtils.LOGE(TAG, mPrefs.getInt(PREFS_SCROLL_Y, 0) + "");
-    LogUtils.LOGE(TAG, mPrefs.getInt(PREFS_ZOOM_LEVEL, 5) + "");
-
   }
 
-  @Override
-  public void onClick(View v) {
-    int id = v.getId();
-
-    switch (id) {
-      case R.id.search_button:
-
-        break;
-    }
-  }
 
 
   void addOverLays(ArrayList<NearbyAtlasResult> places) {
@@ -206,7 +175,7 @@ public class NearbyFragment extends Fragment implements MapViewConstants, View.O
     for (NearbyAtlasResult place : places) {
       addOverLay(place, false);
 
-      points.add(new GeoPoint(Double.valueOf(place.getLatitude()), Double.valueOf(place.getLongitude())));
+      points.add(new GeoPoint(place.getLatitude(), place.getLongitude()));
     }
     mMapView.postInvalidate();
     mMapView.setBounds(points);
@@ -214,7 +183,6 @@ public class NearbyFragment extends Fragment implements MapViewConstants, View.O
 
 
   void addOverLay(NearbyAtlasResult place, boolean showInfo) {
-
     if (place == null)
       return;
 
@@ -222,30 +190,15 @@ public class NearbyFragment extends Fragment implements MapViewConstants, View.O
     marker.setTitle(place.getPlaceName());
     marker.setDescription(place.getPlaceAddress());
     marker.setIcon(getResources().getDrawable(R.drawable.marker_selected));
-    marker.setPosition(new GeoPoint(Double.valueOf(place.getLatitude()), Double.valueOf(place.getLongitude())));
-
+    marker.setPosition(new GeoPoint(place.getLatitude(), place.getLongitude()));
     marker.setInfoWindow(infoWindow);
     marker.setRelatedObject(place);
-
     if (showInfo)
       marker.showInfoWindow();
     mMapView.getOverlays().add(marker);
-
-
   }
-
 
   void clearOverlays() {
     mMapView.getOverlays().clear();
-
-  }
-
-  @Override
-  public void onDestroyView() {
-
-
-    super.onDestroyView();
-
-
   }
 }

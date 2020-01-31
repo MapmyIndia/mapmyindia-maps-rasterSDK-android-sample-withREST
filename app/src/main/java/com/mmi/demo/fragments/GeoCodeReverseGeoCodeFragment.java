@@ -25,7 +25,6 @@ import com.mmi.services.api.geocoding.GeoCodeResponse;
 import com.mmi.services.api.geocoding.MapmyIndiaGeoCoding;
 import com.mmi.services.api.reversegeocode.MapmyIndiaReverseGeoCode;
 import com.mmi.util.GeoPoint;
-import com.mmi.util.LogUtils;
 import com.mmi.util.constants.MapViewConstants;
 
 import java.util.ArrayList;
@@ -39,9 +38,6 @@ import retrofit2.Response;
  * Created by Mohammad Akram on 03-04-2015
  */
 public class GeoCodeReverseGeoCodeFragment extends Fragment implements MapEventsReceiver, MapViewConstants, View.OnClickListener {
-
-  private static final String TAG = GeoCodeReverseGeoCodeFragment.class.getSimpleName();
-
 
   MapView mMapView = null;
   BasicInfoWindow infoWindow;
@@ -71,7 +67,7 @@ public class GeoCodeReverseGeoCodeFragment extends Fragment implements MapEvents
 
   private void setupUI(View view) {
     view.findViewById(R.id.search_button).setOnClickListener(this);
-    searchEditText = (EditText) view.findViewById(R.id.search_place);
+    searchEditText = view.findViewById(R.id.search_place);
   }
 
 
@@ -91,9 +87,8 @@ public class GeoCodeReverseGeoCodeFragment extends Fragment implements MapEvents
       public void onResponse(Call<PlaceResponse> call, Response<PlaceResponse> response) {
         if (response.code() == 200) {
           if (response.body() != null) {
-            List<com.mmi.services.api.Place> placesList = response.body().getPlaces();
-            com.mmi.services.api.Place place = placesList.get(0);
-            // String add = place.getFormattedAddress();
+            List<Place> placesList = response.body().getPlaces();
+            Place place = placesList.get(0);
 
             addOverLay(place, true);
 
@@ -106,59 +101,27 @@ public class GeoCodeReverseGeoCodeFragment extends Fragment implements MapEvents
         }
 
         transparentProgressDialog.dismiss();
-        //((BaseActivity) ReverseGeocodeActivity.this).hide();
       }
 
       @Override
       public void onFailure(Call<PlaceResponse> call, Throwable t) {
         transparentProgressDialog.dismiss();
-        // ((BaseActivity) ReverseGeocodeActivity.this).hide();
         Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_LONG).show();
       }
     });
 
 
-        /*try {
 
-            new ReverseGeocodeManager().getPlace(p, new ReverseGeocodeListener() {
-                @Override
-                public void onResult(int code, final Place place) {
-                    if (place != null) {
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                addOverLay(place, true);
-
-                                mMapView.invalidate();
-                            }
-                        });
-
-                    }
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }*/
     return false;
   }
 
   @Override
   public void onPause() {
     final SharedPreferences.Editor edit = mPrefs.edit();
-
     edit.putInt(PREFS_SCROLL_X, mMapView.getScrollX());
     edit.putInt(PREFS_SCROLL_Y, mMapView.getScrollY());
     edit.putInt(PREFS_ZOOM_LEVEL, mMapView.getZoomLevel());
-
-    edit.commit();
-
-    LogUtils.LOGE(TAG, "onPause");
-    LogUtils.LOGE(TAG, mMapView.getScrollX() + "");
-    LogUtils.LOGE(TAG, mMapView.getScrollY() + "");
-    LogUtils.LOGE(TAG, mMapView.getZoomLevel() + "");
-
-
+    edit.apply();
     super.onPause();
   }
 
@@ -167,13 +130,6 @@ public class GeoCodeReverseGeoCodeFragment extends Fragment implements MapEvents
     super.onResume();
     mMapView.setZoom(mPrefs.getInt(PREFS_ZOOM_LEVEL, 5));
     mMapView.scrollTo(mPrefs.getInt(PREFS_SCROLL_X, 0), mPrefs.getInt(PREFS_SCROLL_Y, 0));
-
-    LogUtils.LOGE(TAG, "onResume");
-
-    LogUtils.LOGE(TAG, mPrefs.getInt(PREFS_SCROLL_X, 0) + "");
-    LogUtils.LOGE(TAG, mPrefs.getInt(PREFS_SCROLL_Y, 0) + "");
-    LogUtils.LOGE(TAG, mPrefs.getInt(PREFS_ZOOM_LEVEL, 5) + "");
-
   }
 
   @Override
@@ -193,7 +149,6 @@ public class GeoCodeReverseGeoCodeFragment extends Fragment implements MapEvents
             if (response.code() == 200) {
               if (response.body() != null) {
                 List<GeoCode> placesList = response.body().getResults();
-                // Place place = placesList.get(0);
                 addOverLays(placesList);
               } else {
                 Toast.makeText(getActivity(), "Not able to get value, Try again.", Toast.LENGTH_SHORT).show();
@@ -212,23 +167,6 @@ public class GeoCodeReverseGeoCodeFragment extends Fragment implements MapEvents
           }
         });
 
-                /*try {
-                    new GeocodeManager().getPlace(searchText, new GeocodeListener() {
-                        @Override
-                        public void onResult(int code, final ArrayList<Place> places) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    addOverLays(places);
-                                }
-                            });
-
-                        }
-                    });
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }*/
         break;
     }
   }
@@ -254,7 +192,6 @@ public class GeoCodeReverseGeoCodeFragment extends Fragment implements MapEvents
     Marker marker = new Marker(mMapView);
     marker.setTitle(place.getLocality());
     marker.setDescription(place.getFormattedAddress());
-    //  marker.setSubDescription(place.getFullAddress());
     marker.setIcon(getResources().getDrawable(R.drawable.marker_selected));
     if (place.getLat() != null)
       marker.setPosition(new GeoPoint(Double.valueOf(place.getLat()), Double.valueOf(place.getLng())));
@@ -277,7 +214,6 @@ public class GeoCodeReverseGeoCodeFragment extends Fragment implements MapEvents
     Marker marker = new Marker(mMapView);
     marker.setTitle(place.locality);
     marker.setDescription(place.formattedAddress);
-    //  marker.setSubDescription(place.getFullAddress());
     marker.setIcon(getResources().getDrawable(R.drawable.marker_selected));
     marker.setPosition(new GeoPoint(place.latitude, place.longitude));
 

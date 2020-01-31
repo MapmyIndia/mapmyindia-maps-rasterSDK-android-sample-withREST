@@ -3,6 +3,7 @@ package com.mmi.demo.fragments;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.avast.android.dialogs.fragment.SimpleDialogFragment;
 import com.avast.android.dialogs.iface.ISimpleDialogListener;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.utils.PolylineUtils;
@@ -11,7 +12,6 @@ import com.mmi.demo.util.TransparentProgressDialog;
 import com.mmi.layers.MapEventsOverlay;
 import com.mmi.layers.Marker;
 import com.mmi.layers.PathOverlay;
-import com.mmi.services.api.directions.DirectionsCriteria;
 import com.mmi.services.api.directions.MapmyIndiaDirections;
 import com.mmi.services.api.directions.models.DirectionsResponse;
 import com.mmi.services.api.directions.models.DirectionsRoute;
@@ -28,7 +28,6 @@ import retrofit2.Response;
  * Created by Mohammad Akram on 03-04-2015
  */
 public class DirectionPolylineFragment extends MapBaseFragment implements ISimpleDialogListener {
-  public final String TAG = DirectionPolylineFragment.class.getSimpleName();
 
   final int REQUEST_CODE = 5;
   GeoPoint selectedPoint = null;
@@ -57,15 +56,8 @@ public class DirectionPolylineFragment extends MapBaseFragment implements ISimpl
     pathOverlay.setPoints(geoPoints);
     mMapView.getOverlays().add(pathOverlay);
     mMapView.postInvalidate();
-
-    getActivity().runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
         if (setBound)
           mMapView.setBounds(geoPoints);
-      }
-    });
-
   }
 
 
@@ -84,14 +76,9 @@ public class DirectionPolylineFragment extends MapBaseFragment implements ISimpl
   @Override
   public boolean longPressHelper(GeoPoint p) {
     selectedPoint = p;
-    List<Point> list = new ArrayList<>();
-    list.add(Point.fromLngLat(77.705956, 28.984644));
-    list.add(Point.fromLngLat(77.696732, 29.471397));
-    getDirections(Point.fromLngLat(77.216721, 28.644800), Point.fromLngLat(77.226145, 28.942162), list);
-
-//        SimpleDialogFragment.createBuilder(getActivity(), getActivity().getSupportFragmentManager()).setTargetFragment(this, REQUEST_CODE)
-//                .setTitle(R.string.driving_directions).setMessage(R.string.set_as).setPositiveButtonText(R.string.set_departure)
-//                .setNegativeButtonText(R.string.set_destination).setNeutralButtonText(R.string.set_viapoint).show();
+    SimpleDialogFragment.createBuilder(getActivity(), getActivity().getSupportFragmentManager()).setTargetFragment(this, REQUEST_CODE)
+      .setTitle(R.string.driving_directions).setMessage(R.string.set_as).setPositiveButtonText(R.string.set_departure)
+      .setNegativeButtonText(R.string.set_destination).setNeutralButtonText(R.string.set_viapoint).show();
     return super.longPressHelper(p);
   }
 
@@ -102,8 +89,8 @@ public class DirectionPolylineFragment extends MapBaseFragment implements ISimpl
         startPoint = selectedPoint;
         addMarker(selectedPoint, false);
         if (endPoint != null && startPoint != null)
-//                    getDirections(startPoint, endPoint, viaPoints);
-          break;
+          getDirections(startPoint, endPoint, viaPoints);
+        break;
     }
   }
 
@@ -115,8 +102,8 @@ public class DirectionPolylineFragment extends MapBaseFragment implements ISimpl
         viaPoints.add(selectedPoint);
         addMarker(selectedPoint, true);
         if (endPoint != null && startPoint != null)
-//                    getDirections(startPoint, endPoint, viaPoints);
-          break;
+          getDirections(startPoint, endPoint, viaPoints);
+        break;
     }
   }
 
@@ -127,61 +114,61 @@ public class DirectionPolylineFragment extends MapBaseFragment implements ISimpl
         endPoint = selectedPoint;
         addMarker(selectedPoint, false);
         if (endPoint != null && startPoint != null)
-//                    getDirections(startPoint, endPoint, viaPoints);
-          break;
+          getDirections(startPoint, endPoint, viaPoints);
+        break;
     }
   }
 
 
-  void getDirections(final Point startPointLocal, final Point endPointLocal, final List<Point> viaPoints) {
+  void getDirections(final GeoPoint startPointLocal, final GeoPoint endPointLocal, final ArrayList<GeoPoint> viaPoints) {
     transparentProgressDialog = new TransparentProgressDialog(getContext(), R.drawable.circle_loader, "");
     transparentProgressDialog.show();
     clearOverlays();
 
-
     MapmyIndiaDirections.Builder builder = MapmyIndiaDirections.builder()
-      .origin(startPointLocal)
       .steps(true)
-      .resource(DirectionsCriteria.RESOURCE_ROUTE_ETA)
-      .profile(DirectionsCriteria.PROFILE_DRIVING)
-      .overview(DirectionsCriteria.OVERVIEW_FULL)
-      .destination(endPointLocal);
+      .origin(Point.fromLngLat(startPointLocal.getLongitude(), startPointLocal.getLatitude()))
+      .destination(Point.fromLngLat(endPointLocal.getLongitude(), endPointLocal.getLatitude()));
 
-
-    for (Point point : viaPoints) {
-      builder.addWaypoint(point);
+    if (viaPoints != null) {
+      for (GeoPoint geoPoint : viaPoints) {
+        builder.addWaypoint(Point.fromLngLat(geoPoint.getLongitude(), geoPoint.getLatitude()));
+      }
     }
+
     builder.build().enqueueCall(new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-        if (response.code() == 200) {
-          if (response.body() != null) {
-            DirectionsResponse directionsResponse = response.body();
-            List<DirectionsRoute> tripList = directionsResponse.routes();
-//                        List<com.mmi.services.api.directions.legacy.model.Trip> tripList = results.getTrips();
-            if (tripList.size() > 0) {
-              List<Point> pointList = PolylineUtils.decode(tripList.get(0).geometry(), 6);
-              ArrayList<GeoPoint> geoPoints = new ArrayList<>();
-              for (Point point : pointList) {
-                geoPoints.add(new GeoPoint(point.latitude(), point.longitude()));
-              }
-              addPolyline(geoPoints, true);
+        if (response.isSuccessful()) {
+          DirectionsResponse directionsResponse = response.body();
+          if (directionsResponse != null) {
+            List<Point> pointList = new ArrayList<>();
+            for (DirectionsRoute route : directionsResponse.routes()) {
+              pointList.addAll(PolylineUtils.decode(route.geometry(), 6));
             }
+            ArrayList<GeoPoint> geoPoints = new ArrayList<>();
+            for (Point point : pointList) {
+              geoPoints.add(new GeoPoint(point.latitude(), point.longitude()));
+            }
+            addPolyline(geoPoints, false);
           }
         } else {
           Toast.makeText(getActivity(), response.message(), Toast.LENGTH_LONG).show();
         }
-//                addMarker(startPoint, false);
-//                addMarker(endPoint, false);
-        startPoint = null;
-        endPoint = null;
+        addMarker(startPoint, false);
+        addMarker(endPoint, false);
+        if (viaPoints != null && viaPoints.size() > 0) {
+          for (GeoPoint geoPoint : viaPoints) {
+            addMarker(geoPoint, true);
+          }
+        }
+
         transparentProgressDialog.dismiss();
       }
 
       @Override
       public void onFailure(Call<DirectionsResponse> call, Throwable t) {
         transparentProgressDialog.dismiss();
-        t.printStackTrace();
       }
     });
 

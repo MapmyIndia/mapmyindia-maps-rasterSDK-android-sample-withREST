@@ -98,14 +98,6 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
    */
   private List<ELocation> getSuggestions(String searchText) {
 
-        /*try {
-            AutoSuggestManager autoSuggestManager =new AutoSuggestManager();
-
-            return autoSuggestManager.getSuggestions(searchText, null,false);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }*/
     MapmyIndiaAutoSuggest.builder()
       .query(searchText)
       .build()
@@ -115,17 +107,6 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
           if (response.code() == 200) {
             if (response.body() != null) {
               suggestedList = response.body().getSuggestedLocations();
-              //   if (suggestedList.size() > 0) {
-                                    /*recyclerView.setVisibility(View.VISIBLE);
-                                    AutoSuggestAdapter autoSuggestAdapter = new AutoSuggestAdapter(suggestedList, new AutoSuggestAdapter.PlaceName() {
-                                        @Override
-                                        public void nameOfPlace(String name) {
-                                            selectedPlace.selectedPlaceName(name);
-                                            recyclerView.setVisibility(View.GONE);
-                                 //       }
-                                    });
-                                    recyclerView.setAdapter(autoSuggestAdapter);*/
-
             }
           } else {
             Toast.makeText(mContext, "Not able to get value, Try again.", Toast.LENGTH_SHORT).show();
