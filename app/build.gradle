@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
@@ -28,7 +30,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.avast:android-styled-dialogs:2.2.0'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.avast:android-styled-dialogs:2.2.0'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.mapmyindia.sdk:mapmyindia-android-raster-sdk:2.5.1'
 

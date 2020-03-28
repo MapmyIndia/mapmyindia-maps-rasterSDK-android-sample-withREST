@@ -18,7 +18,7 @@
     android:padding="10dp">
 
 
-    <com.mmi.demo.widget.DelayAutoCompleteTextView
+    <com.mmi.demo.DelayAutoCompleteTextView
       android:id="@+id/search_place"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

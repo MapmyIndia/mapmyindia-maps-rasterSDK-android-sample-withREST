@@ -1,41 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">MapmyIndia MapView Demo</string>
+    <string name="app_name">MapmyIndia MapView Demo</string>
 
-  <string name="marker">Marker</string>
+    <string name="marker">Marker</string>
 
-  <string name="touch_event">Touch Event</string>
-  <string name="map_center">Map center</string>
-  <string name="top_left">Top left</string>
-  <string name="top_right">Top Right</string>
-  <string name="bottom_left">Bottom left</string>
-  <string name="bottom_right">Bottom right</string>
-  <string name="zoom_level">Zoom level</string>
+    <string name="touch_event">Touch Event</string>
+    <string name="map_center">Map center</string>
+    <string name="top_left">Top left</string>
+    <string name="top_right">Top Right</string>
+    <string name="bottom_left">Bottom left</string>
+    <string name="bottom_right">Bottom right</string>
+    <string name="zoom_level">Zoom level</string>
 
-  <!-- map_menu-->
-  <string name="set_departure">Set Start</string>
-  <string name="set_destination">Set Stop</string>
-  <string name="set_viapoint">Add Via-Point</string>
-
-
-  <string name="set_as">Set as</string>
-  <string name="driving_directions">Driving Directions</string>
+    <!-- map_menu-->
+    <string name="set_departure">Set Start</string>
+    <string name="set_destination">Set Stop</string>
+    <string name="set_viapoint">Add Via-Point</string>
 
 
-  <!--Map samples-->
-  <string name="map_markers">Map Markers</string>
-  <string name="polyline">Polyline</string>
-  <string name="map_event">Map Events</string>
-  <string name="info_windows">Info Windows</string>
-  <string name="marker_cluster">Marker Cluster</string>
-  <string name="user_location">User Location</string>
+    <string name="set_as">Set as</string>
+    <string name="driving_directions">Driving Directions</string>
 
-  <string name="polygons">Polygons</string>
-  <string name="arrow_marker">Arrow Marker</string>
-  <string name="marker_test">Markers Test</string>
-  <string name="geocode_reverse_geocode">GeoCode reverse GeoCode</string>
-  <string name="auto_suggest">Auto Suggest</string>
-  <string name="search_nearby">Search Nearby</string>
-  <string name="drawer_close">close</string>
-  <string name="drawer_open">open</string>
+
+    <!--Map samples-->
+    <string name="map_markers">Map Markers</string>
+    <string name="polyline">Polyline</string>
+    <string name="map_event">Map Events</string>
+    <string name="info_windows">Info Windows</string>
+    <string name="marker_cluster">Marker Cluster</string>
+    <string name="user_location">User Location</string>
+
+    <string name="polygons">Polygons</string>
+    <string name="arrow_marker">Arrow Marker</string>
+    <string name="marker_test">Markers Test</string>
+    <string name="geocode_reverse_geocode">GeoCode reverse GeoCode</string>
+    <string name="auto_suggest">Auto Suggest</string>
+    <string name="search_nearby">Search Nearby</string>
+    <string name="drawer_close">close</string>
+    <string name="drawer_open">open</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_test2">Test2Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="home_second">Home Second</string>
 </resources>
