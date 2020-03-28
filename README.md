@@ -53,12 +53,21 @@ compileOptions {
 ```
 ### Add your API keys to the SDK -  
 The grant type is "client_credentials" (without quotes).
+#### Java
 ```java
-MapmyIndiaAccountManager.getInstance().setRestAPIKey(getRestAPIKey()); 
-MapmyIndiaAccountManager.getInstance().setMapSDKKey(getMapSDKKey()); 
-MapmyIndiaAccountManager.getInstance().setAtlasGrantType(getAtlasGrantType()); 
-MapmyIndiaAccountManager.getInstance().setAtlasClientId(getAtlasClientId()); 
-MapmyIndiaAccountManager.getInstance().setAtlasClientSecret(getAtlasClientSecret());
+MapmyIndiaAccountManager.getInstance().setRestAPIKey(getRestAPIKey());  
+MapmyIndiaAccountManager.getInstance().setMapSDKKey(getMapSDKKey());  
+MapmyIndiaAccountManager.getInstance().setAtlasGrantType(getAtlasGrantType());  
+MapmyIndiaAccountManager.getInstance().setAtlasClientId(getAtlasClientId());  
+MapmyIndiaAccountManager.getInstance().setAtlasClientSecret(getAtlasClientSecret());  
+```
+#### Kotlin
+```kotlin
+MapmyIndiaAccountManager.getInstance().restAPIKey = getRestAPIKey()  
+MapmyIndiaAccountManager.getInstance().mapSDKKey = getMapSDKKey()  
+MapmyIndiaAccountManager.getInstance().atlasGrantType = getAtlasGrantType()  
+MapmyIndiaAccountManager.getInstance().atlasClientId = getAtlasClientId()  
+MapmyIndiaAccountManager.getInstance().atlasClientSecret = getAtlasClientSecret()
 ```
 
 You cannot use the MapmyIndia Map Mobile SDK without these function calls. You will find your keys in your [API Dashboard](http://www.mapmyindia.com/api/dashboard).
