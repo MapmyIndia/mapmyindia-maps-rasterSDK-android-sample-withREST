@@ -74,23 +74,23 @@ class AutoCompleteAdapter(private val context: Context) : BaseAdapter(), Filtera
     }
 
     private fun getSuggestions(searchText: String): List<ELocation>? {
-        MapmyIndiaAutoSuggest.builder()
+        var mapmyIndiaAutoSuggest = MapmyIndiaAutoSuggest.builder()
                 .query(searchText)
                 .build()
-                .enqueueCall(object : Callback<AutoSuggestAtlasResponse> {
-                    override fun onFailure(call: Call<AutoSuggestAtlasResponse>, t: Throwable) {
+        mapmyIndiaAutoSuggest.enqueueCall(object : Callback<AutoSuggestAtlasResponse> {
+            override fun onFailure(call: Call<AutoSuggestAtlasResponse>, t: Throwable) {
 
+            }
+
+            override fun onResponse(call: Call<AutoSuggestAtlasResponse>, response: Response<AutoSuggestAtlasResponse>) {
+                if (response.code() == 200) {
+                    if (response.body() != null) {
+                        suggestedList = response.body()?.suggestedLocations
                     }
+                }
+            }
 
-                    override fun onResponse(call: Call<AutoSuggestAtlasResponse>, response: Response<AutoSuggestAtlasResponse>) {
-                        if(response.code() == 200) {
-                            if(response.body() != null) {
-                                suggestedList = response.body()?.suggestedLocations
-                            }
-                        }
-                    }
-
-                })
+        })
 
         return suggestedList
     }

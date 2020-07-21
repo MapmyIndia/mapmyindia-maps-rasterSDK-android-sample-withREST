@@ -34,6 +34,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.avast:android-styled-dialogs:2.2.0'
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.mapmyindia.sdk:mapmyindia-android-raster-sdk:2.5.1'
+    implementation 'com.mapmyindia.sdk:mapmyindia-android-raster-sdk:2.6.0'
 
 }
